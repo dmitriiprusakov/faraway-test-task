@@ -1,51 +1,49 @@
-# FARAWAY TEST TASK
+# TEST TASK
 
 ## TASK
 
-Используя стороннее API в качестве источника данных (например: Star Wars API https://swapi.dev/), реализовать SPA приложение React и Typescript, состоящее из двух страниц.
-На главной странице отобразить список или карточки персонажей, к списку добавить возможность пагинации.
-На главной странице должен быть реализован поиск или фильтрация персонажей (в зависимости от выбранного API).
-Реализовать страницу с подробной информацией по выбранному персонажу.
+Using a third-party API as a data source (for example, the Star Wars API at https://swapi.dev/), build a two-page single-page application (SPA) with React and TypeScript.
 
-Плюсы:
-- Аккуратная верстка
-- Использование UI фреймворка (Material, Ant, Bootstrap и т.п.)
+The main page should display a list or cards of characters, with pagination.
 
-Также важно выполнить:
-- Для работы с данными использовать хранилище Redux
-- Редактировать информацию о персонаже локально, без отправки на сервер
-- Тесты
+Implement character search or filtering on the main page, depending on the chosen API.
+
+Create a page with detailed information about the selected character.
+
+Bonus points:
+
+- Clean, polished layout
+- Use of a UI framework such as Material UI, Ant Design, or Bootstrap
+
+Additional requirements:
+
+- Use Redux for data management
+- Allow character information to be edited locally, without sending changes to the server
+- Include tests
 
 ---
 
 ## SOLUTION
 
-Приветствую!
+Hello!
 
-Для выполнения задачи использовал последние версии TypeScript, React, React Router, Redux через Toolkit с Query, для стилзации CSS Modules. Проект "приправлен" Webpack'ом и ESLint'ом. 
+For this task, I used the latest versions of TypeScript, React, React Router, and Redux Toolkit with RTK Query, along with CSS Modules for styling. Webpack and ESLint round out the setup.
 
-В качестве API решил взять [SpaceX API](https://github.com/r-spacex/SpaceX-API), а для UI взял AntDesign.
+I chose the [SpaceX API](https://github.com/r-spacex/SpaceX-API) as the data source and Ant Design for the UI.
 
-RTK Query использовал впервые, но весьма понравилось, до этого использовал свои решения на Axios или SWR для Next.
+This was my first time using RTK Query, and I really enjoyed it. Previously, I used custom solutions built on Axios, or SWR for Next.js.
 
-Демо задеплоил на [GH Pages](https://dmitrytevtonsky.github.io/faraway-test-task/).
+The demo is deployed on [GitHub Pages](https://dmitrytevtonsky.github.io/faraway-test-task/).
 
-Постарался создать удобную файловую структуру. 
+I aimed to create a clear, easy-to-navigate file structure:
 
-В `/api` находится конфигурация API слайса и типы, описывающие запросы/ответы.
+- `/api` contains the API slice configuration and types describing requests and responses.
+- `/core` contains shared application components and a slice, as well as the routing configuration.
+- `/features` contains individual features, such as the launch list page and the launch details page.
+- `/store` contains the application-wide Redux setup.
 
-В `/core` находятся глобальные компоненты и слайс, там же настроен и роутинг.
+I frequently use code splitting. For example, routes are lazy-loaded and wrapped in ErrorBoundary and Suspense. I implemented error, loading, and empty states, used semantic HTML elements, and split the code into small components.
 
-В `/features` находятся отдельные фичи, например страницы списка "запусков" и страница "запуска".
+For this project, I chose to include only end-to-end tests using Cypress, as there was limited time for other types of tests. I also have experience writing unit tests with Jest, component tests, and Redux store tests.
 
-В `/store` глобальные сущности Redux'а.
-
-Часто применяю code-splitting, например роуты грузятся "лениво" и обернуты в ErrorBoundary и Suspense. Сделал обработку состояний, error, loading, nodata. Использовал семантические теги.
-Разбиваю код на небольшие компоненты.
-
-Для тестов в проекте решил сделать только e2e тесты через cypress, на другие оставалось не так много времени. Но так же был опыт unit тестов на jest, компонентных тестов и тестов для стора Redux.
-
-Статика, бандлы и чанки собраны и минифицированы через Webpack.
-
-
-
+Static assets, bundles, and chunks are built and minified with Webpack.
