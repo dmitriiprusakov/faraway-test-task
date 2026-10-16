@@ -1,47 +1,28 @@
 import type { FC } from "react";
 import { Avatar, Badge, Button, Card as AntdCard } from "antd";
-import dayjs from "dayjs";
+import type { Launch } from "api/types";
+import { formatLaunchDate } from "core/format-launch-date";
 import clsx from "clsx";
 import { BookOutlined, RocketOutlined, YoutubeOutlined } from "@ant-design/icons";
 
 import css from "./index.module.css";
 import { Link } from "react-router-dom";
 
-const renderStatus = (upcoming: boolean | undefined, success: boolean | undefined) => {
-	if (upcoming) return <Badge status="processing" text="Upcoming" />;
-	if (success) return <Badge status="success" text="Success" />;
-	return <Badge status="error" text="Failure" />;
-};
-
-type CardProps = {
-	name?: string;
-	details?: string;
-	links?: {
-		article: string;
-		presskit: string;
-		webcast: string;
-		patch: {
-			small: string;
-			large: string;
-		}
-	};
-	date_utc?: string;
-	success?: boolean;
-	upcoming?: boolean;
+type CardProps = Partial<Pick<Launch, "name" | "details" | "links" | "date_utc" | "status">> & {
 	loading?: boolean;
-}
-const Card: FC<CardProps> = ({ name, details, links, date_utc, success, upcoming, loading }: CardProps) => {
+};
+const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }: CardProps) => {
 	return (
 		<AntdCard
 			loading={loading}
 			className={css.card}
 			title={name}
 			cover={
-				links?.patch.large
+				links?.patch
 					? <img
 						loading="lazy"
-						alt={`Patch of ${name || "not named"} mission`}
-						src={links?.patch.large}
+						alt={`Image of ${name || "not named"} mission`}
+						src={links?.patch}
 						className={css.cardCoverImage}
 					/>
 					: <div />
@@ -79,11 +60,11 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, success, upcoming
 			]}
 		>
 			<AntdCard.Meta
-				avatar={<Avatar size="large" shape="square" src={links?.patch.small} />}
+				avatar={<Avatar size="large" shape="square" src={links?.patch} />}
 				title={
 					<div className={css.metaTitle}>
-						{dayjs(date_utc).format("YYYY.MM.DD HH:mm:ss [UTC]")}
-						{renderStatus(upcoming, success)}
+						{formatLaunchDate(date_utc)}
+						<Badge status={status?.tone ?? "default"} text={status?.label ?? "Unknown"} />
 					</div>
 				}
 				description={details}

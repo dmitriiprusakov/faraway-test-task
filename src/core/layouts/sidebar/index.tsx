@@ -13,8 +13,8 @@ import css from "./index.module.css";
 const { RangePicker } = DatePicker;
 
 type FiltersFormValues = {
-	text: string;
-	datesRange: [Dayjs, Dayjs];
+	text?: string;
+	datesRange?: [Dayjs | null, Dayjs | null];
 }
 
 const Sidebar: FC = () => {
@@ -28,7 +28,7 @@ const Sidebar: FC = () => {
 		dispatch(setFilters({
 			text,
 			datesRange: datesRange
-				? [datesRange[0].toISOString(), datesRange[1].toISOString()]
+				? [datesRange[0]?.startOf("day").toISOString(), datesRange[1]?.endOf("day").toISOString()]
 				: undefined,
 		}));
 
@@ -47,7 +47,7 @@ const Sidebar: FC = () => {
 
 	const fields = useMemo(() => filters ? [
 		{ name: ["text"], value: filters.text },
-		{ name: ["datesRange"], value: filters.datesRange?.map(string => dayjs(string)) },
+		{ name: ["datesRange"], value: filters.datesRange?.map(value => value ? dayjs(value) : null) },
 	] : undefined, [filters]);
 
 	return (
@@ -76,7 +76,7 @@ const Sidebar: FC = () => {
 				<Form.Item label="Search" name="text">
 					<Input data-cy="search-input" />
 				</Form.Item>
-				<Form.Item label="Date range" name="datesRange">
+				<Form.Item label="Date range" name="datesRange" data-cy="date-range-input">
 					<RangePicker allowEmpty={[true, true]} className={css.rangePicker} />
 				</Form.Item>
 				<Form.Item>

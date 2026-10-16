@@ -14,30 +14,29 @@ import LaunchLoading from "./loading";
 const Launch: FC = () => {
 	const { launchId } = useParams<RouterParams>();
 
-	const { data, isLoading, isFetching, isError, refetch } = useGetLaunchQuery(launchId ?? skipToken);
+	const { data, isLoading, isFetching, isError, error, refetch } = useGetLaunchQuery(launchId ?? skipToken);
 
 	if (!launchId) return null;
 
 	if (isLoading || isFetching) return <LaunchLoading />;
 
-	if (isError) return <LaunchError retry={refetch} />;
+	if (isError) return <LaunchError retry={refetch} rateLimited={error && "status" in error && error.status === 429} />;
 
 	if (!data) return <Empty />;
 
-	const { name, date_utc, details, links, success, upcoming } = data;
+	const { name, date_utc, details, links, status } = data;
 
 	return (
 		<>
 			<Card
 				name={name}
 				details={details}
-				success={success}
-				upcoming={upcoming}
+				status={status}
 				date_utc={date_utc}
 				links={links}
 			/>
-			{!!links?.flickr?.original?.length && (
-				<Photos links={links.flickr.original} />
+			{!!links.photos.length && (
+				<Photos links={links.photos} />
 			)}
 			{links?.youtube_id && (
 				<Embedded

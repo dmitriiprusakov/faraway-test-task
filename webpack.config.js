@@ -32,7 +32,7 @@ module.exports = function (env = {}, { mode = "development" } = {}) {
 					exclude: /node_modules/,
 					options: {
 						presets: [
-							["@babel/preset-react", { runtime: "automatic" }],
+							["@babel/preset-react", { runtime: "automatic", development: !production }],
 							"@babel/preset-typescript",
 						],
 					},

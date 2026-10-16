@@ -6,7 +6,7 @@ export type Pagination = {
 
 export type Filters = {
 	text?: string;
-	datesRange?: [string, string],
+	datesRange?: [string | undefined, string | undefined],
 }
 
 export type RouterParams = {

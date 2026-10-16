@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 type LaunchesErrorProps = {
 	retry: () => Promise<unknown>;
+	rateLimited?: boolean;
 }
-const LaunchesError: FC<LaunchesErrorProps> = ({ retry }: LaunchesErrorProps) => {
+const LaunchesError: FC<LaunchesErrorProps> = ({ retry, rateLimited }: LaunchesErrorProps) => {
 	const navigate = useNavigate();
 
 	const handleRetry = () => {
@@ -19,7 +20,8 @@ const LaunchesError: FC<LaunchesErrorProps> = ({ retry }: LaunchesErrorProps) =>
 	return (
 		<Result
 			status="warning"
-			title="Something went wrong."
+			title={rateLimited ? "Request limit reached." : "Something went wrong."}
+			subTitle={rateLimited ? "Launch Library's request limit has been reached. Please try again later." : undefined}
 			extra={[
 				<Button
 					key="console"

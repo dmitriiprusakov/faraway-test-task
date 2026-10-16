@@ -1,31 +1,16 @@
 import type { FC } from "react";
 import { Badge, Card as AntdCard, Typography } from "antd";
-import dayjs from "dayjs";
+import type { Launch } from "api/types";
+import { formatLaunchDate } from "core/format-launch-date";
 
 import css from "./index.module.css";
 
 const { Text } = Typography;
 
-const renderStatus = (upcoming: boolean | undefined, success: boolean | undefined) => {
-	if (upcoming) return <Badge status="processing" text="Upcoming" />;
-	if (success) return <Badge status="success" text="Success" />;
-	return <Badge status="error" text="Failure" />;
-};
-
-type CardProps = {
-	name?: string;
-	details?: string;
-	links?: {
-		patch: {
-			small: string;
-		}
-	};
-	date_utc?: string;
-	success?: boolean;
-	upcoming?: boolean;
+type CardProps = Partial<Pick<Launch, "name" | "details" | "links" | "date_utc" | "status">> & {
 	loading?: boolean;
-}
-const Card: FC<CardProps> = ({ name, details, links, date_utc, success, upcoming, loading }: CardProps) => {
+};
+const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }: CardProps) => {
 	return (
 		<AntdCard
 			loading={loading}
@@ -33,11 +18,11 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, success, upcoming
 			className={css.card}
 			hoverable
 			cover={
-				links?.patch.small
+				links?.image.small
 					? <img
 						loading="lazy"
-						alt={`Patch of ${name || "not named"} mission`}
-						src={links?.patch.small}
+						alt={`Image of ${name || "not named"} mission`}
+						src={links?.patch}
 						className={css.cardCoverImage}
 					/>
 					: <div />
@@ -46,9 +31,9 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, success, upcoming
 			<article className={css.article}>
 				<h3 className={css.heading}>
 					<Text type="secondary">
-						{dayjs(date_utc).format("YYYY.MM.DD HH:mm:ss [UTC]")}
+						{formatLaunchDate(date_utc)}
 					</Text>
-					{renderStatus(upcoming, success)}
+					<Badge status={status?.tone ?? "default"} text={status?.label ?? "Unknown"} />
 				</h3>
 				<p className={css.details}>
 					{details}

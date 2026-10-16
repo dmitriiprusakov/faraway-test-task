@@ -17,7 +17,7 @@ const Launches: FC = () => {
 
 	const { text, datesRange } = useAppSelector(selectFilters);
 
-	const { data, isLoading, isFetching, isError, refetch } = useGetLaunchesQuery({
+	const { data, isLoading, isFetching, isError, error, refetch } = useGetLaunchesQuery({
 		options: {
 			page,
 			limit: pageSize,
@@ -30,7 +30,7 @@ const Launches: FC = () => {
 
 	if (isLoading || isFetching) return <LaunchesLoading />;
 
-	if (isError) return <LaunchesError retry={refetch} />;
+	if (isError) return <LaunchesError retry={refetch} rateLimited={error && "status" in error && error.status === 429} />;
 
 	if (!data || !data.docs.length) return <Empty />;
 
@@ -39,15 +39,14 @@ const Launches: FC = () => {
 	return (
 		<>
 			<div className={css.launches}>
-				{docs.map(({ id, name, details, links, date_utc, success, upcoming }) => (
+				{docs.map(({ id, name, details, links, date_utc, status }) => (
 					<Link key={id} to={id} data-cy="launch-link">
 						<Card
 							name={name}
 							details={details}
 							links={links}
 							date_utc={date_utc}
-							success={success}
-							upcoming={upcoming}
+							status={status}
 						/>
 					</Link>
 				))}

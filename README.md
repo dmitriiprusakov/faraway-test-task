@@ -67,6 +67,27 @@ The full audit reports one unpatched development-tooling advisory for `braces`
 Production builds succeed with Webpack warnings about the initial bundle size
 and runtime chunk placement.
 
+### Launch data
+
+The application now uses [TheSpaceDevs Launch Library 2](https://thespacedevs.com/llapi)
+v2.3.0. The existing SpaceX focus is preserved with `lsp__id=121`; launches remain
+ordered by launch date. The API adapter maps `results`/`count` and limit/offset
+pagination to the existing list UI, translates search and inclusive date filters,
+and normalizes mission descriptions, images, patches, information links, videos,
+and launch statuses. Missing mission/media/date fields are supported. Name edits
+remain local to the Redux query cache; no changes are sent to the API.
+
+Development builds use `https://lldev.thespacedevs.com/2.3.0/`, the provider's
+recommended test endpoint with limited, stale data. Production builds use
+`https://ll.thespacedevs.com/2.3.0/` for current data. The public production API
+allows 15 requests per hour. Unused list/detail responses are retained for one
+hour during the browser session, and HTTP 429 responses show a request-limit
+message. Reloading the app clears this in-memory cache.
+
+Cypress tests use Launch Library-shaped fixtures to verify pagination, search,
+date ranges (including a missing bound), media mapping, local editing, statuses,
+missing fields, rate limits, and error handling without consuming the public quota.
+
 ### Original implementation
 
 Hello!

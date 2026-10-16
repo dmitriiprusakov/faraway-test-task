@@ -20,13 +20,13 @@ const LaunchEdit: FC = () => {
 	const navigate = useNavigate();
 	const { launchId } = useParams<RouterParams>();
 
-	const { data, isLoading, isFetching, isError, refetch } = useGetLaunchQuery(launchId ?? skipToken);
+	const { data, isLoading, isFetching, isError, error, refetch } = useGetLaunchQuery(launchId ?? skipToken);
 
 	if (!launchId) return null;
 
 	if (isLoading || isFetching) return <LaunchLoading />;
 
-	if (isError) return <LaunchError retry={refetch} />;
+	if (isError) return <LaunchError retry={refetch} rateLimited={error && "status" in error && error.status === 429} />;
 
 	if (!data) return <Empty />;
 
