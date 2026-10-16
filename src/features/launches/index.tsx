@@ -51,7 +51,11 @@ const Launches: FC = () => {
 					</Link>
 				))}
 			</div>
-			<Pagination current={currentPage} pageSize={limit} total={totalDocs} />
+			<Pagination
+				current={currentPage}
+				pageSize={limit}
+				total={totalDocs}
+			/>
 		</>
 	);
 };

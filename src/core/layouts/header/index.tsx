@@ -16,7 +16,7 @@ const Header: FC = () => {
 
 	return (
 		<div className={css.content}>
-			<Link to="/">
+			<Link to="/" className={css.title}>
 				<h1>SpaceX Launches</h1>
 			</Link>
 
