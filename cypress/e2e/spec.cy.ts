@@ -6,6 +6,7 @@ const launches: LibraryLaunch[] = [
   id: "launch-1", name: "Falcon 1 | FalconSAT-2", net: "2006-03-24T22:30:00Z",
   status: { id: 4, name: "Launch Failure", abbrev: "Failure" },
   image: { image_url: "https://images.example.test/rocket.jpg", thumbnail_url: "https://images.example.test/thumbnail.jpg" },
+  mission_patches: [{ priority: 10, image_url: "https://images.example.test/patch.png" }],
   mission: { description: "First Falcon launch" },
  },
  {
@@ -31,10 +32,20 @@ function response(results = launches, offset = 0) {
 
 function openFilters() {
  cy.get('[data-cy="show-filters-button"]').click();
+ cy.get(".ant-drawer-content-wrapper").should(($panel) => {
+  expect($panel.attr("class")).not.to.match(/-(appear|enter)(?:-|\s|$)/);
+ });
+ cy.get('[data-cy="search-input"]').should("be.visible");
 }
 
 function submitFilters() {
  cy.get('[data-cy="submit-filters-button"]').click();
+}
+
+function selectDate(index: number, date: string) {
+ cy.get('[data-cy="date-range-input"] input').eq(index).click();
+ cy.get('[data-cy="date-range-input"] input').eq(index).clear().type(date);
+ cy.get('.ant-picker-dropdown:visible .ant-picker-cell-in-view[title="' + date + '"]').first().click();
 }
 
 describe("SpaceX launches via Launch Library 2", () => {
@@ -62,7 +73,9 @@ describe("SpaceX launches via Launch Library 2", () => {
   });
   cy.get('[data-cy="launch-link"]').should("have.length", 2);
   cy.contains("2006.03.24 22:30:00 UTC").should("be.visible");
-  cy.get('[data-cy="launch-link"]').first().find("img").should("have.attr", "src", "https://images.example.test/thumbnail.jpg");
+  cy.get('[data-cy="launch-link"]').first().find("img")
+   .should("have.attr", "src", "https://images.example.test/patch.png")
+   .and("have.prop", "naturalWidth").and("be.greaterThan", 0);
   openFilters();
   cy.get('[data-cy="search-input"]').type("CRS-6");
   submitFilters();
@@ -90,7 +103,8 @@ describe("SpaceX launches via Launch Library 2", () => {
  it("changes the page size using limit/offset pagination", () => {
   cy.visit("/");
   cy.wait("@launches");
-  cy.get(".ant-pagination-options-size-changer").click();
+  cy.get(".ant-pagination-options-size-changer [role=combobox]").click();
+  cy.get(".ant-pagination-options-size-changer [role=combobox]").should("have.attr", "aria-expanded", "true");
   cy.get(".ant-select-item-option").contains("25 / page").click();
   cy.wait("@launches").then(({ request }) => {
    const params = new URL(request.url).searchParams;
@@ -103,8 +117,8 @@ describe("SpaceX launches via Launch Library 2", () => {
   cy.visit("/");
   cy.wait("@launches");
   openFilters();
-  cy.get('[data-cy="date-range-input"] input').first().type("2015-04-14{enter}");
-  cy.get('[data-cy="date-range-input"] input').last().type("2015-04-15{enter}");
+  selectDate(0, "2015-04-14");
+  selectDate(1, "2015-04-15");
   submitFilters();
   cy.wait("@launches").then(({ request }) => {
    const params = new URL(request.url).searchParams;
@@ -117,8 +131,7 @@ describe("SpaceX launches via Launch Library 2", () => {
   cy.visit("/");
   cy.wait("@launches");
   openFilters();
-  cy.get('[data-cy="date-range-input"] input').first().type("2015-04-14");
-  cy.get('.ant-picker-cell[title="2015-04-14"]').first().click();
+  selectDate(0, "2015-04-14");
   cy.get('[data-cy="date-range-input"] input').last().click();
   cy.get('[data-cy="search-input"]').click();
   submitFilters();
@@ -163,7 +176,7 @@ describe("SpaceX launches via Launch Library 2", () => {
    null,
   ];
   cy.intercept("GET", apiUrl + "/launches/?*", response(statuses.map((status, i) => ({
-   ...launches[0], id: "status-" + i, name: "Status " + i, status, net: null, image: null, mission: null,
+   ...launches[0], id: "status-" + i, name: "Status " + i, status, net: null, image: null, mission: null, mission_patches: [],
   }))));
   cy.visit("/");
   for (const label of ["Upcoming", "On hold", "In flight", "Partial failure", "Payload deployed", "Unknown"]) {
@@ -173,11 +186,20 @@ describe("SpaceX launches via Launch Library 2", () => {
  });
 
  it("shows a detail with no mission, images, or webcast", () => {
-  cy.intercept("GET", apiUrl + "/launches/launch-1/", { ...launches[0], mission: null, image: null, net: null, status: null });
+  cy.intercept("GET", apiUrl + "/launches/launch-1/", { ...launches[0], mission: null, image: null, mission_patches: [], net: null, status: null });
   cy.visit("/launch-1");
   cy.contains("Falcon 1 | FalconSAT-2").should("be.visible");
   cy.contains("Date to be determined").should("be.visible");
   cy.get("iframe").should("not.exist");
+ });
+
+ it("renders a mission patch without requiring a launch photo", () => {
+  cy.intercept("GET", apiUrl + "/launches/?*", response([{ ...launches[0], image: null }, launches[1]]));
+  cy.visit("/");
+  cy.get('[data-cy="launch-link"]').first().find("img")
+   .should("have.attr", "src", "https://images.example.test/patch.png")
+   .and("have.prop", "naturalWidth").and("be.greaterThan", 0);
+  cy.get('[data-cy="launch-link"]').last().find("img").should("not.exist");
  });
 
  it("shows the error state on the edit route", () => {

@@ -18,7 +18,7 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }
 			className={css.card}
 			hoverable
 			cover={
-				links?.image.small
+				links?.patch
 					? <img
 						loading="lazy"
 						alt={`Image of ${name || "not named"} mission`}
