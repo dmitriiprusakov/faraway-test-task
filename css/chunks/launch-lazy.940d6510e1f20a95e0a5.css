@@ -17,6 +17,8 @@
 
 .metaTitle-Y4Rq4 {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     align-items: center;
     justify-content: space-between;
 }
@@ -46,4 +48,4 @@
 }
 
 
-/*# sourceMappingURL=launch-lazy.081c06b281b35f7d8bed.css.map*/
+/*# sourceMappingURL=launch-lazy.940d6510e1f20a95e0a5.css.map*/

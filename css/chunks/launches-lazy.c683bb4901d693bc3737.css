@@ -55,6 +55,8 @@
 
 .heading-Tk81h {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     justify-content: space-between;
     margin-bottom: 1rem;
 }
@@ -82,4 +84,4 @@
 }
 
 
-/*# sourceMappingURL=launches-lazy.13ff3bca5044d8c8dab6.css.map*/
+/*# sourceMappingURL=launches-lazy.c683bb4901d693bc3737.css.map*/

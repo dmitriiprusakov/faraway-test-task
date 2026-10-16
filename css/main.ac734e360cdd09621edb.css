@@ -253,6 +253,32 @@ template {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
+}
+
+.title-_h7Lf {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.controls-NYhJy {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.language-D2vxX {
+    width: 7rem;
+}
+
+@media (max-width: 600px) {
+    .title-_h7Lf h1 {
+        font-size: 1rem;
+        line-height: 1.3;
+    }
 }
 
 .layout-FAJKi {
@@ -434,4 +460,4 @@ a:hover {
 }
 
 
-/*# sourceMappingURL=main.20d0ee355d6b00c9fe8b.css.map*/
+/*# sourceMappingURL=main.ac734e360cdd09621edb.css.map*/
