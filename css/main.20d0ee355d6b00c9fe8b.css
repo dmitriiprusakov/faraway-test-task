@@ -21,9 +21,7 @@ html {
   -ms-overflow-style: scrollbar;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-@-ms-viewport {
-  width: device-width;
-}
+
 body {
   margin: 0;
 }
@@ -52,7 +50,6 @@ p {
 abbr[title],
 abbr[data-original-title] {
   -webkit-text-decoration: underline dotted;
-  text-decoration: underline;
   text-decoration: underline dotted;
   border-bottom: 0;
   cursor: help;
@@ -247,10 +244,6 @@ template {
 [hidden] {
   display: none !important;
 }
-mark {
-  padding: 0.2em;
-  background-color: #feffe6;
-}
 
 .content-ExCQI {
     height: 100%;
@@ -441,4 +434,4 @@ a:hover {
 }
 
 
-/*# sourceMappingURL=bundle.5b12224d845b926910d7.css.map*/
+/*# sourceMappingURL=main.20d0ee355d6b00c9fe8b.css.map*/
