@@ -1,0 +1,34 @@
+.сontent-e2F7A {
+    height: 100%;
+    margin: 0 auto;
+    padding: 1rem var(--sides-padding);
+    max-width: var(--max-width);
+    display: flex;
+    align-items: center;
+}
+
+.drawerRoot-D9acq .ant-drawer-content-wrapper {
+    width: 100% !important;
+}
+
+.button-atZra {
+    margin-right: 1rem;
+}
+
+.button-atZra:last-child {
+    margin-right: 0;
+}
+
+.rangePicker-S3HpU {
+    width: 100%;
+}
+
+/*Tablet and desktop styles*/
+@media (min-width: 768px) {
+    .drawerRoot-D9acq .ant-drawer-content-wrapper {
+        width: 40rem !important;
+    }
+}
+
+
+/*# sourceMappingURL=sidebar-lazy.eaca3c505d22616dce3e.css.map*/
