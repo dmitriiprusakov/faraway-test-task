@@ -21,7 +21,7 @@
     "lint:fix": "eslint . --fix",
     "eslint": "pnpm lint:fix",
     "typecheck": "tsc --noEmit && tsc --noEmit -p cypress/tsconfig.json",
-    "deploy": "pnpm build && gh-pages -d dist",
+    "deploy": "npm run build && gh-pages -d dist",
     "cy": "cypress open",
     "cy:run": "cypress run"
   },
