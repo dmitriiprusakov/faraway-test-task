@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import type { FC } from "react";
 import { Carousel } from "antd";
 
 import css from "./index.module.css";

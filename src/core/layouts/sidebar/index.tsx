@@ -1,6 +1,8 @@
 import { Button, DatePicker, Drawer, Form, Input } from "antd";
-import React, { FC, useMemo } from "react";
-import dayjs, { Dayjs } from "dayjs";
+import type { FC } from "react";
+import { useMemo } from "react";
+import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 import { selectFilters, selectSidebarVisibility } from "core/redux/selectors";
 import { resetFilters, setFilters, toggleSidebarVisibility } from "core/redux/slice";

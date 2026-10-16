@@ -1,5 +1,5 @@
 import { Card } from "antd";
-import React, { FC } from "react";
+import type { FC } from "react";
 
 import { selectPagination } from "core/redux/selectors";
 import { useAppSelector } from "store";

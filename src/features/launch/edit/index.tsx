@@ -1,11 +1,14 @@
 import { Button, Empty, Form, Input } from "antd";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { apiSlice, useGetLaunchQuery } from "api";
-import React, { FC } from "react";
+import type { FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "store";
-import { RouterParams } from "types";
+import type { RouterParams } from "types";
 
 import css from "./index.module.css";
+import LaunchError from "../error";
+import LaunchLoading from "../loading";
 
 type FormValues = {
 	name: string;
@@ -17,13 +20,13 @@ const LaunchEdit: FC = () => {
 	const navigate = useNavigate();
 	const { launchId } = useParams<RouterParams>();
 
+	const { data, isLoading, isFetching, isError, refetch } = useGetLaunchQuery(launchId ?? skipToken);
+
 	if (!launchId) return null;
 
-	const { data, isLoading, isFetching, isError } = useGetLaunchQuery(launchId);
+	if (isLoading || isFetching) return <LaunchLoading />;
 
-	if (isLoading || isFetching) return <>kek</>;
-
-	if (isError) return <>lol</>;
+	if (isError) return <LaunchError retry={refetch} />;
 
 	if (!data) return <Empty />;
 
@@ -36,7 +39,7 @@ const LaunchEdit: FC = () => {
 			})
 		);
 
-		navigate(`/${launchId}`);
+		void navigate(`/${launchId}`);
 	};
 
 	return (

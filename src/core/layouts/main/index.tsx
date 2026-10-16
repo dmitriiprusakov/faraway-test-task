@@ -1,4 +1,5 @@
-import React, { FC, Suspense, lazy } from "react";
+import type { FC } from "react";
+import { Suspense, lazy } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 
 import { ErrorBoundary, ErrorResult } from "core/components";

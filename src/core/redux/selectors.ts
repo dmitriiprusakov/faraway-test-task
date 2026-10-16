@@ -1,5 +1,5 @@
-import { RootState } from "store";
-import { Filters, Pagination } from "types";
+import type { RootState } from "store";
+import type { Filters, Pagination } from "types";
 
 const selectSidebarVisibility = (state: RootState): boolean => state.core.sidebarVisibility;
 

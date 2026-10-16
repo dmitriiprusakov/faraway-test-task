@@ -1,73 +1,54 @@
-const path = require('path');
-const {DefinePlugin} = require('webpack');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("node:path");
+const ESLintPlugin = require("eslint-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
-module.exports = function (env, { mode }) {
+module.exports = function (env = {}, { mode = "development" } = {}) {
+	const production = mode === "production";
+	const publicPath = production ? "/faraway-test-task/" : "/";
+
 	return {
-		mode: mode || 'development',
-		devtool: 'source-map',
-		entry: './src/index.tsx',
-		devServer: {
-			port: 8080,
-			historyApiFallback: true,
-			client: {
-				overlay: false,
-			},
-		},
+		mode,
+		devtool: "source-map",
+		entry: "./src/index.tsx",
+		devServer: { port: 8080, historyApiFallback: true },
 		output: {
-			publicPath: mode === 'production' ? '/faraway-test-task/' : "/",
-			filename: `js/bundle${mode === "production" ? ".[fullhash]" : ""}.js`,
-			chunkFilename: 'js/chunks/[name].[contenthash].js',
+			path: path.resolve(__dirname, "dist"),
+			clean: true,
+			publicPath,
+			filename: production ? "js/[name].[contenthash].js" : "js/[name].js",
+			chunkFilename: "js/chunks/[name].[contenthash].js",
 		},
 		resolve: {
-			modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-			extensions: ['.ts', '.tsx', '.js', '.jsx', '.less'],
+			modules: [path.resolve(__dirname, "src"), "node_modules"],
+			extensions: [".ts", ".tsx", ".js", ".jsx"],
 		},
 		module: {
 			rules: [
 				{
 					test: /\.tsx?$/,
-					loader: 'babel-loader',
+					loader: "babel-loader",
 					exclude: /node_modules/,
 					options: {
-						presets: ['@babel/preset-react', '@babel/preset-typescript'],
+						presets: [
+							["@babel/preset-react", { runtime: "automatic" }],
+							"@babel/preset-typescript",
+						],
 					},
 				},
 				{
-					test: /\.less$/i,
+					test: /\.css$/i,
 					use: [
+						production ? MiniCssExtractPlugin.loader : "style-loader",
 						{
-							loader: mode !== "production" ? "style-loader" : MiniCssExtractPlugin.loader,
-						},
-						'css-loader',
-						{
-							loader: "less-loader",
-							options: {
-								lessOptions: {
-									javascriptEnabled: true,
-									modifyVars: {
-										'primary-color': '#3772FF',
-										'link-color': '#3772FF',
-									},
-								},
-							}
-						}
-					],
-				},
-				{
-					test: /\.css$/,
-					use: [
-						{
-							loader: mode !== "production" ? "style-loader" : MiniCssExtractPlugin.loader,
-						},
-						{
-							loader: 'css-loader',
+							loader: "css-loader",
 							options: {
 								sourceMap: true,
 								modules: {
-									localIdentName: mode === "production" ? "[local]-[hash:base64:5]" : "[path]__[local]--[hash:base64:5]",
+									auto: /\.module\.css$/i,
+									namedExport: false,
+									localIdentName: production ? "[local]-[hash:base64:5]" : "[path]__[local]--[hash:base64:5]",
 								},
 							},
 						},
@@ -76,32 +57,10 @@ module.exports = function (env, { mode }) {
 			],
 		},
 		plugins: [
-			new ESLintPlugin(),
-			new HtmlWebpackPlugin({
-				template: './public/index.html',
-				favicon: './public/favicon.ico', 
-				publicPath: mode === 'production' ? '/faraway-test-task' : "/",
-				minify: mode === 'production' && {
-					removeComments: true,
-					collapseWhitespace: true,
-					removeRedundantAttributes: true,
-					useShortDoctype: true,
-					removeEmptyAttributes: true,
-					removeStyleLinkTypeAttributes: true,
-					keepClosingSlash: true,
-					minifyJS: true,
-					minifyCSS: true,
-					minifyURLs: true,
-				},
-			}),
-			new DefinePlugin({
-				'process.env.PUBLIC_URL': JSON.stringify(process.env.PUBLIC_URL),
-			}),
-		].concat(mode !== 'production' ? [] : [
-			new MiniCssExtractPlugin({
-				filename: `css/bundle${mode === "production" ? ".[fullhash]" : ""}.css`,
-				chunkFilename: "css/chunks/[name].[contenthash].css",
-			}),
-		]),
+			new ESLintPlugin({ extensions: ["ts", "tsx"], context: "src" }),
+			new HtmlWebpackPlugin({ template: "./public/index.html", favicon: "./public/favicon.ico", publicPath }),
+			...(production ? [new MiniCssExtractPlugin({ filename: "css/[name].[contenthash].css", chunkFilename: "css/chunks/[name].[contenthash].css" })] : []),
+			...(env.analyze ? [new BundleAnalyzerPlugin({ analyzerMode: "static", openAnalyzer: false })] : []),
+		],
 	};
 };

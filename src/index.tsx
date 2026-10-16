@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import React, { Suspense, StrictMode } from "react";
+import { Suspense, StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
 import "antd/dist/reset.css";

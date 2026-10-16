@@ -1,6 +1,6 @@
 import { Button, Result as AntdResult } from "antd";
-import { ResultStatusType } from "antd/es/result";
-import React, { FC } from "react";
+import type { ResultStatusType } from "antd/es/result";
+import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 type ErrorResultProps = {
@@ -12,7 +12,7 @@ const ErrorResult: FC<ErrorResultProps> = ({ status, title, subTitle }: ErrorRes
 	const navigate = useNavigate();
 
 	const handleGoHome = () => {
-		navigate("/");
+		void navigate("/");
 	};
 
 	return (

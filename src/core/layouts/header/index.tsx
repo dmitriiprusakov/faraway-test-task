@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import React, { FC } from "react";
+import type { FC } from "react";
 import { Link, Outlet, Route, Routes } from "react-router-dom";
 
 import { useAppDispatch } from "store";

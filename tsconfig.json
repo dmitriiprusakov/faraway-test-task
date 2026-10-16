@@ -1,49 +1,55 @@
 {
   "compilerOptions": {
-    "baseUrl": "src/",
-    "target": "es6", // Specify ECMAScript target version
+    "target": "ES2022",
     "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
     ],
-    "allowJs": false, // Allow JavaScript files to be compiled
-    "skipLibCheck": true, // Skip type checking of all declaration files
-    "esModuleInterop": true, // Disables namespace imports (import * as fs from "fs") and enables CJS/AMD/UMD style imports (import fs from "fs")
-    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
-    "strict": true, // Enable all strict type checking options
-    "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file.
-    "module": "esnext", // Specify module code generation
-    "moduleResolution": "node", // Resolve modules using Node.js style
-    "isolatedModules": true, // Unconditionally emit imports for unresolved files
-    "resolveJsonModule": true, // Include modules imported with .json extension
-    "noEmit": true, // Do not emit output (meaning do not compile code, only perform type checking)
-    "jsx": "react", // Support JSX in .tsx files
-    "sourceMap": false, // Generate corrresponding .map file
-    "noUnusedLocals": true, // Report errors on unused locals
-    "noUnusedParameters": true, // Report errors on unused parameters
-    "incremental": true, // Enable incremental compilation by reading/writing information from prior compilations to a file on disk
-    "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
-    "plugins": [
-      {
-        "name": "typescript-plugin-css-modules",
-        "options": {
-          // "namedExports": true,
-          "classnameTransform": "camelCase",
-          "customMatcher": "\\.module\\.css$",
-          "dotenvOptions": {},
-          "postcssOptions": {},
-          "rendererOptions": {}
-        }
-      }
-    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "api": [
+        "./src/api"
+      ],
+      "api/*": [
+        "./src/api/*"
+      ],
+      "core": [
+        "./src/core"
+      ],
+      "core/*": [
+        "./src/core/*"
+      ],
+      "features/*": [
+        "./src/features/*"
+      ],
+      "store": [
+        "./src/store"
+      ],
+      "types": [
+        "./src/types"
+      ]
+    },
+    "jsx": "react-jsx",
+    "strict": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "types": [
+      "node",
+      "react",
+      "react-dom"
+    ]
   },
   "include": [
-    "src/**/*",
-    "cypress/**/*",
-  ],
-  "exclude": [
-    "cypress.config.ts",
-    "node_modules",
+    "src"
   ]
 }

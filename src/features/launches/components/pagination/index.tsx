@@ -1,5 +1,5 @@
 import { setPagination } from "core/redux/slice";
-import React, { FC } from "react";
+import type { FC } from "react";
 import { useAppDispatch } from "store";
 import { Pagination as AntdPagination } from "antd";
 

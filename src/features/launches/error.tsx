@@ -1,5 +1,5 @@
 import { Button, Result } from "antd";
-import React, { FC } from "react";
+import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 type LaunchesErrorProps = {
@@ -13,7 +13,7 @@ const LaunchesError: FC<LaunchesErrorProps> = ({ retry }: LaunchesErrorProps) =>
 	};
 
 	const handleGoHome = () => {
-		navigate("/");
+		void navigate("/");
 	};
 
 	return (

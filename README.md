@@ -25,6 +25,50 @@ Additional requirements:
 
 ## SOLUTION
 
+### Development
+
+Use Node.js 24.22.0 (see `.nvmrc`) and pnpm 12.14.0. The build tooling requires
+Node.js `^22.18.0 || >=24.11.0`.
+
+```sh
+corepack enable
+corepack prepare pnpm@12.14.0 --activate
+pnpm install --frozen-lockfile
+pnpm start
+```
+
+The development server runs at http://localhost:8080 and supports direct navigation
+to launch and edit routes.
+
+```sh
+pnpm lint       # Check application, test, and build configuration code
+pnpm typecheck  # Check application and Cypress types separately
+pnpm build      # Type-check and build dist/ for /faraway-test-task/
+pnpm analyze    # Build and write dist/report.html
+pnpm cy:run     # Run end-to-end tests with the development server running
+pnpm cy         # Open the interactive Cypress runner
+pnpm deploy     # Build and publish dist/ to GitHub Pages
+```
+
+The application uses React 19, Ant Design 6, Redux Toolkit 2, React Router 7,
+Webpack 5, ESLint 10, and Cypress 16. All build loaders and plugins are declared
+explicitly; the unused Create React App and Jest packages have been removed.
+Cypress tests stub API responses and cover filtering, pagination, local editing,
+validation, loading routes directly, empty/error states, retry, and missing pages.
+
+Type checking runs on TypeScript 7. The `typescript` dependency aliases the official
+TypeScript 6 compatibility package because ESLint still requires the JavaScript
+compiler API. `@typescript/native` aliases TypeScript 7 and provides `tsc`, following
+the [official side-by-side setup](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0).
+
+As of October 16, 2026, `pnpm audit --prod` reports no known vulnerabilities.
+The full audit reports one unpatched development-tooling advisory for `braces`
+([GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)).
+Production builds succeed with Webpack warnings about the initial bundle size
+and runtime chunk placement.
+
+### Original implementation
+
 Hello!
 
 For this task, I used the latest versions of TypeScript, React, React Router, and Redux Toolkit with RTK Query, along with CSS Modules for styling. Webpack and ESLint round out the setup.

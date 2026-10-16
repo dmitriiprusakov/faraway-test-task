@@ -1,5 +1,8 @@
 dist
 node_modules
+.tools
+*.tsbuildinfo
+report.html
 
 cypress/videos
 cypress/screenshots

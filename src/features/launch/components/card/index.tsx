@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import type { FC } from "react";
 import { Avatar, Badge, Button, Card as AntdCard } from "antd";
 import dayjs from "dayjs";
 import clsx from "clsx";

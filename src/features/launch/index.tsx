@@ -1,10 +1,11 @@
 
 import { Empty } from "antd";
-import React, { FC } from "react";
+import { skipToken } from "@reduxjs/toolkit/query";
+import type { FC } from "react";
 import { useParams } from "react-router-dom";
 
 import { useGetLaunchQuery } from "api";
-import { RouterParams } from "types";
+import type { RouterParams } from "types";
 
 import { Card, Embedded, Photos } from "./components";
 import LaunchError from "./error";
@@ -13,9 +14,9 @@ import LaunchLoading from "./loading";
 const Launch: FC = () => {
 	const { launchId } = useParams<RouterParams>();
 
-	if (!launchId) return null;
+	const { data, isLoading, isFetching, isError, refetch } = useGetLaunchQuery(launchId ?? skipToken);
 
-	const { data, isLoading, isFetching, isError, refetch } = useGetLaunchQuery(launchId);
+	if (!launchId) return null;
 
 	if (isLoading || isFetching) return <LaunchLoading />;
 

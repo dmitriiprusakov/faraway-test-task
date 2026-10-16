@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { apiSlice } from "api";
-import { Filters, Pagination } from "types";
+import type { Filters, Pagination } from "types";
 
 export type CoreState = {
 	sidebarVisibility: boolean;
