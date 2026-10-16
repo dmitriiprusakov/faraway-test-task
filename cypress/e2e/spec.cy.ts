@@ -67,6 +67,29 @@ describe("SpaceX launches via Launch Library 2", () => {
   cy.intercept("GET", "https://www.youtube.com/embed/*", "<html><body>Webcast</body></html>");
  });
 
+ it("loads filters on first open and preserves the form when reopened", () => {
+  cy.intercept("GET", "**/sidebar-lazy*.js", req => {
+   req.on("response", res => { res.setDelay(1000); });
+  }).as("sidebarChunk");
+  cy.visit("/");
+  cy.wait("@launches");
+  cy.get('[data-cy="launch-link"]').should("have.length", 2);
+  cy.get("@sidebarChunk.all").should("have.length", 0);
+  cy.get('[data-cy="search-input"]').should("not.exist");
+
+  cy.get('[data-cy="show-filters-button"]').click();
+  cy.contains('[role="status"]', "Loading filters…").should("be.visible");
+  cy.wait("@sidebarChunk");
+  cy.get('[data-cy="search-input"]').should("be.visible").type("Unsubmitted search");
+  cy.contains('[role="status"]', "Loading filters…").should("not.exist");
+  cy.get(".ant-drawer-close").click();
+  cy.get('[data-cy="search-input"]').should("not.be.visible");
+
+  openFilters();
+  cy.get('[data-cy="search-input"]').should("have.value", "Unsubmitted search");
+  cy.get("@sidebarChunk.all").should("have.length", 1);
+ });
+
  it("filters, resets, paginates, and edits a launch locally", () => {
   cy.visit("/");
   cy.wait("@launches").then(({ request }) => {

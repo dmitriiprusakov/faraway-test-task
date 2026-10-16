@@ -3,18 +3,14 @@ import { useTranslation } from "react-i18next";
 import type { FC } from "react";
 import { Link, Outlet, Route, Routes } from "react-router-dom";
 
-import { useAppDispatch } from "store";
-import { toggleSidebarVisibility } from "core/redux/slice";
-
 import css from "./index.module.css";
 
-const Header: FC = () => {
-	const { t, i18n } = useTranslation();
-	const dispatch = useAppDispatch();
+type HeaderProps = {
+	onShowFilters: () => void;
+};
 
-	const showFiltersSidebar = () => {
-		dispatch(toggleSidebarVisibility());
-	};
+const Header: FC<HeaderProps> = ({ onShowFilters }) => {
+	const { t, i18n } = useTranslation();
 
 	return (
 		<div className={css.content}>
@@ -41,7 +37,7 @@ const Header: FC = () => {
 							element={
 								<Button
 									type="primary"
-									onClick={showFiltersSidebar}
+									onClick={onShowFilters}
 									data-cy="show-filters-button"
 								>
 									{t("filters.title")}

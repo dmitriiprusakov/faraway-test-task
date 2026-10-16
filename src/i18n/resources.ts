@@ -14,6 +14,7 @@ export const en = {
 	},
 	filters: {
 		title: "Filters",
+		loading: "Loading filters…",
 		submit: "Submit",
 		search: "Search",
 		dateRange: "Date range",
@@ -69,6 +70,7 @@ export const ru = {
 	},
 	filters: {
 		title: "Фильтры",
+		loading: "Загрузка фильтров…",
 		submit: "Применить",
 		search: "Поиск",
 		dateRange: "Период",

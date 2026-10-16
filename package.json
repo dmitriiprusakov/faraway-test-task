@@ -18,7 +18,7 @@
   "scripts": {
     "start": "webpack serve --mode=development",
     "build": "npm run typecheck && webpack --mode=production",
-    "analyze": "npm build --env analyze",
+    "analyze": "npm run typecheck && webpack --mode=production --env analyze",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "eslint": "pnpm lint:fix",
