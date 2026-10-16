@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 
 import { Empty } from "antd";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -12,6 +13,7 @@ import LaunchError from "./error";
 import LaunchLoading from "./loading";
 
 const Launch: FC = () => {
+	const { t } = useTranslation();
 	const { launchId } = useParams<RouterParams>();
 
 	const { data, isLoading, isFetching, isError, error, refetch } = useGetLaunchQuery(launchId ?? skipToken);
@@ -40,7 +42,7 @@ const Launch: FC = () => {
 			)}
 			{links?.youtube_id && (
 				<Embedded
-					title={`Webcast of ${name}`}
+					title={t("launch.webcastTitle", { name })}
 					link={`https://www.youtube.com/embed/${links?.youtube_id}`}
 				/>
 			)}

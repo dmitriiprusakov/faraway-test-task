@@ -48,6 +48,11 @@ function selectDate(index: number, date: string) {
  cy.get('.ant-picker-dropdown:visible .ant-picker-cell-in-view[title="' + date + '"]').first().click();
 }
 
+function switchLanguage(label: "English" | "Русский") {
+ cy.get('[data-cy="language-switcher"] [role="combobox"]').click();
+ cy.get(".ant-select-dropdown:visible .ant-select-item-option").contains(label).click();
+}
+
 describe("SpaceX launches via Launch Library 2", () => {
  beforeEach(() => {
   cy.intercept("GET", apiUrl + "/launches/?*", req => {
@@ -219,5 +224,105 @@ describe("SpaceX launches via Launch Library 2", () => {
   cy.contains("Sorry, the page you visited does not exist.").should("be.visible");
   cy.contains("button", "Back Home").click();
   cy.get('[data-cy="launch-link"]').should("have.length", 2);
+ });
+
+ it("switches cached launches between English and Russian without refetching", () => {
+  cy.visit("/");
+  cy.wait("@launches");
+  switchLanguage("Русский");
+  cy.get("h1").should("have.text", "Запуски SpaceX");
+  cy.get("html").should("have.attr", "lang", "ru");
+  cy.title().should("eq", "Запуски SpaceX");
+  cy.get('[data-cy="show-filters-button"]').should("have.text", "Фильтры");
+  cy.contains(".ant-badge-status-text", "Неудача").should("be.visible");
+  cy.contains(".ant-badge-status-text", "Успешно").should("be.visible");
+  cy.contains("24.03.2006 22:30:00 UTC").should("be.visible");
+  cy.contains("Falcon 1 | FalconSAT-2").should("be.visible");
+  cy.window().then(win => expect(win.localStorage.getItem("faraway-language")).to.eq("ru"));
+  switchLanguage("English");
+  cy.get("h1").should("have.text", "SpaceX Launches");
+  cy.get("html").should("have.attr", "lang", "en");
+  cy.contains(".ant-badge-status-text", "Failure").should("be.visible");
+  cy.get("@launches.all").should("have.length", 1);
+ });
+
+ it("remembers Russian and translates validation without losing local edits", () => {
+  cy.visit("/");
+  switchLanguage("Русский");
+  cy.reload();
+  cy.get("h1").should("have.text", "Запуски SpaceX");
+  cy.get('[data-cy="launch-link"]').first().click();
+  cy.wait("@launch");
+  cy.get(".ant-card-head-title").should("contain", "Falcon 1 | FalconSAT-2");
+  cy.get('[data-cy="edit-launch-link"]').should("contain", "Редактировать");
+  cy.get('[data-cy="edit-launch-link"]').click();
+  cy.contains("label", "Название").should("be.visible");
+  cy.get('[data-cy="edit-launch-name-input"]').clear();
+  cy.get('[data-cy="edit-launch-name-submit"]').click();
+  cy.contains("Введите название!").should("be.visible");
+  switchLanguage("English");
+  cy.contains("Please input name!").should("be.visible");
+  cy.get('[data-cy="edit-launch-name-input"]').type("Локальное имя");
+  switchLanguage("Русский");
+  cy.get('[data-cy="edit-launch-name-input"]').should("have.value", "Локальное имя");
+  cy.get('[data-cy="edit-launch-name-submit"]').should("contain", "Сохранить").click();
+  cy.contains("Локальное имя").should("be.visible");
+  cy.get("@launch.all").should("have.length", 1);
+ });
+
+ it("localizes Ant Design pagination, filter fields, and calendar", () => {
+  cy.visit("/");
+  cy.wait("@launches");
+  switchLanguage("Русский");
+  cy.get(".ant-pagination-options-size-changer").should("contain", "стр");
+  openFilters();
+  cy.contains("label", "Поиск").should("be.visible");
+  cy.contains("label", "Период").should("be.visible");
+  cy.get('[data-cy="date-range-input"] input').first()
+   .invoke("attr", "placeholder").should("match", /[А-Яа-яЁё]/);
+  cy.get('[data-cy="submit-filters-button"]').should("contain", "Применить");
+  cy.get('[data-cy="date-range-input"] input').first().click();
+  cy.get(".ant-picker-dropdown:visible .ant-picker-month-btn").first()
+   .invoke("text").should("match", /[А-Яа-яЁё]/);
+ });
+
+ it("translates the empty state and request-limit errors", () => {
+  cy.intercept("GET", apiUrl + "/launches/?*", response([]));
+  cy.visit("/");
+  switchLanguage("Русский");
+  cy.get(".ant-empty-description").should("contain", "Нет данных");
+  cy.intercept("GET", apiUrl + "/launches/?*", { statusCode: 429, body: {} });
+  cy.reload();
+  cy.contains("Превышен лимит запросов.").should("be.visible");
+  cy.contains("button", "Повторить попытку").should("be.visible");
+ });
+
+ it("uses the saved language on a missing-page deep link", () => {
+  cy.visit("/missing/route", {
+   onBeforeLoad(win) { win.localStorage.setItem("faraway-language", "ru"); },
+  });
+  cy.contains("К сожалению, такой страницы не существует.").should("be.visible");
+  cy.contains("button", "На главную").click();
+  cy.get('[data-cy="launch-link"]').should("have.length", 2);
+  cy.contains(".ant-badge-status-text", "Неудача").should("be.visible");
+ });
+
+ it("falls back to English for an unsupported saved language", () => {
+  cy.visit("/", {
+   onBeforeLoad(win) { win.localStorage.setItem("faraway-language", "de"); },
+  });
+  cy.get("html").should("have.attr", "lang", "en");
+  cy.get("h1").should("have.text", "SpaceX Launches");
+ });
+
+ it("keeps the translated header readable on a narrow screen", () => {
+  cy.viewport(390, 844);
+  cy.visit("/");
+  switchLanguage("Русский");
+  cy.get("header h1").should(($title) => {
+   expect($title[0].scrollWidth).to.be.at.most($title[0].clientWidth);
+  });
+  cy.get('[data-cy="language-switcher"]').should("be.visible");
+  cy.get('[data-cy="show-filters-button"]').should("be.visible");
  });
 });

@@ -6,10 +6,30 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
 }
 
 .title {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.language {
+    width: 7rem;
+}
+
+@media (max-width: 600px) {
+    .title h1 {
+        font-size: 1rem;
+        line-height: 1.3;
+    }
 }

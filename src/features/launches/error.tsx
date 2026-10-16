@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button, Result } from "antd";
 import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,7 @@ type LaunchesErrorProps = {
 	rateLimited?: boolean;
 }
 const LaunchesError: FC<LaunchesErrorProps> = ({ retry, rateLimited }: LaunchesErrorProps) => {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	const handleRetry = () => {
@@ -20,21 +22,21 @@ const LaunchesError: FC<LaunchesErrorProps> = ({ retry, rateLimited }: LaunchesE
 	return (
 		<Result
 			status="warning"
-			title={rateLimited ? "Request limit reached." : "Something went wrong."}
-			subTitle={rateLimited ? "Launch Library's request limit has been reached. Please try again later." : undefined}
+			title={t(rateLimited ? "error.rateLimit" : "error.generic")}
+			subTitle={rateLimited ? t("error.rateLimitDescription") : undefined}
 			extra={[
 				<Button
 					key="console"
 					type="primary"
 					onClick={handleRetry}
 				>
-					Retry last operation
+					{t("common.retry")}
 				</Button>,
 				<Button
 					key="home"
 					onClick={handleGoHome}
 				>
-					Go home
+					{t("common.goHome")}
 				</Button>,
 			]}
 		/>

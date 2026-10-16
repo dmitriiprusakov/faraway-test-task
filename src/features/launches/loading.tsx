@@ -9,7 +9,7 @@ import { Pagination } from "./components";
 import css from "./index.module.css";
 
 const LaunchesLoading: FC = () => {
-	const { pageSize } = useAppSelector(selectPagination);
+	const { pageSize, page, total } = useAppSelector(selectPagination);
 
 	return (
 		<>
@@ -26,7 +26,12 @@ const LaunchesLoading: FC = () => {
 					</Card>
 				))}
 			</div>
-			<Pagination disabled pageSize={pageSize} />
+			<Pagination
+				disabled
+				pageSize={pageSize}
+				current={page}
+				total={total}
+			/>
 		</>
 	);
 };

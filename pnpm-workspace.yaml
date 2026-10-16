@@ -6,3 +6,5 @@ minimumReleaseAgeExclude:
   - webpack@5.112.0
   - baseline-browser-mapping@2.11.29
   - electron-to-chromium@1.5.458
+  - i18next@26.4.7
+  - react-i18next@17.0.20

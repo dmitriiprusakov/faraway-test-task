@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button, Result as AntdResult } from "antd";
 import type { ResultStatusType } from "antd/es/result";
 import type { FC } from "react";
@@ -10,6 +11,7 @@ type ErrorResultProps = {
 }
 const ErrorResult: FC<ErrorResultProps> = ({ status, title, subTitle }: ErrorResultProps) => {
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 
 	const handleGoHome = () => {
 		void navigate("/");
@@ -20,7 +22,7 @@ const ErrorResult: FC<ErrorResultProps> = ({ status, title, subTitle }: ErrorRes
 			status={status}
 			title={title}
 			subTitle={subTitle}
-			extra={<Button type="primary" onClick={handleGoHome}>Back Home</Button>}
+			extra={<Button type="primary" onClick={handleGoHome}>{t("common.backHome")}</Button>}
 		/>
 	);
 };

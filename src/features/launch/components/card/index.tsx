@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { FC } from "react";
 import { Avatar, Badge, Button, Card as AntdCard } from "antd";
 import type { Launch } from "api/types";
@@ -12,6 +13,7 @@ type CardProps = Partial<Pick<Launch, "name" | "details" | "links" | "date_utc" 
 	loading?: boolean;
 };
 const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }: CardProps) => {
+	const { t } = useTranslation();
 	return (
 		<AntdCard
 			loading={loading}
@@ -21,7 +23,7 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }
 				links?.patch
 					? <img
 						loading="lazy"
-						alt={`Image of ${name || "not named"} mission`}
+						alt={t("launch.imageAlt", { name: name || t("launch.unnamed") })}
 						src={links?.patch}
 						className={css.cardCoverImage}
 					/>
@@ -29,13 +31,14 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }
 			}
 			extra={
 				<Link to="edit" data-cy="edit-launch-link">
-					<Button>Edit</Button>
+					<Button>{t("common.edit")}</Button>
 				</Link>
 			}
 			actions={[
 				<Link
 					className={clsx(!links?.article && css.disabledLink)}
 					key="spacex"
+					aria-label={t("launch.article")}
 					target={links?.article ? "_blank" : "_self"}
 					to={links?.article || "/"}
 				>
@@ -44,6 +47,7 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }
 				<Link
 					className={clsx(!links?.presskit && css.disabledLink)}
 					key="reddit"
+					aria-label={t("launch.presskit")}
 					target={links?.presskit ? "_blank" : "_self"}
 					to={links?.presskit || "/"}
 				>
@@ -52,6 +56,7 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }
 				<Link
 					className={clsx(!links?.webcast && css.disabledLink)}
 					key="youtube"
+					aria-label={t("launch.webcast")}
 					target={links?.webcast ? "_blank" : "_self"}
 					to={links?.webcast || "/"}
 				>
@@ -63,8 +68,8 @@ const Card: FC<CardProps> = ({ name, details, links, date_utc, status, loading }
 				avatar={<Avatar size="large" shape="square" src={links?.patch} />}
 				title={
 					<div className={css.metaTitle}>
-						{formatLaunchDate(date_utc)}
-						<Badge status={status?.tone ?? "default"} text={status?.label ?? "Unknown"} />
+						{formatLaunchDate(date_utc, t)}
+						<Badge status={status?.tone ?? "default"} text={t(`status.${status?.key ?? "unknown"}`)} />
 					</div>
 				}
 				description={details}

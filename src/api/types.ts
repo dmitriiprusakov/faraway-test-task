@@ -9,7 +9,7 @@ export type Launch = {
 };
 
 export type LaunchStatus = {
-	label: string;
+	key: "upcoming" | "success" | "failure" | "hold" | "inFlight" | "partialFailure" | "payloadDeployed" | "unknown";
 	tone: "processing" | "success" | "error" | "warning" | "default";
 };
 

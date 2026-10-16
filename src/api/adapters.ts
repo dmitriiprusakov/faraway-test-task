@@ -1,15 +1,15 @@
 import type { Launch, LaunchStatus, LibraryLaunch, LibraryLaunchesResponse, LaunchesOptions, LaunchesResponse } from "./types";
 
 const statuses: Record<number, LaunchStatus> = {
-	1: { label: "Upcoming", tone: "processing" },
-	2: { label: "Upcoming", tone: "processing" },
-	3: { label: "Success", tone: "success" },
-	4: { label: "Failure", tone: "error" },
-	5: { label: "On hold", tone: "warning" },
-	6: { label: "In flight", tone: "processing" },
-	7: { label: "Partial failure", tone: "warning" },
-	8: { label: "Upcoming", tone: "processing" },
-	9: { label: "Payload deployed", tone: "processing" },
+	1: { key: "upcoming", tone: "processing" },
+	2: { key: "upcoming", tone: "processing" },
+	3: { key: "success", tone: "success" },
+	4: { key: "failure", tone: "error" },
+	5: { key: "hold", tone: "warning" },
+	6: { key: "inFlight", tone: "processing" },
+	7: { key: "partialFailure", tone: "warning" },
+	8: { key: "upcoming", tone: "processing" },
+	9: { key: "payloadDeployed", tone: "processing" },
 };
 
 function youtubeId(value: string): string | undefined {
@@ -41,7 +41,7 @@ export function adaptLaunch(launch: LibraryLaunch): Launch {
 		name: launch.name,
 		details: launch.mission?.description || undefined,
 		date_utc: launch.net ?? undefined,
-		status: (launch.status && statuses[launch.status.id]) ?? { label: launch.status?.name ?? "Unknown", tone: "default" },
+		status: (launch.status && statuses[launch.status.id]) ?? { key: "unknown", tone: "default" },
 		links: {
 			article: info[0]?.url,
 			presskit: info.find(link => /press\s?kit/i.test(link.title ?? ""))?.url,

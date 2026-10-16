@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { FC } from "react";
 import { Suspense, lazy } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
@@ -13,6 +14,7 @@ const LaunchLazy = lazy(() => import(/* webpackChunkName: "launch-lazy"  */ "fea
 const LaunchEditLazy = lazy(() => import(/* webpackChunkName: "launch-edit-lazy"  */ "features/launch/edit"));
 
 const Main: FC = () => {
+	const { t } = useTranslation();
 	return (
 		<div className={css.content}>
 			<Routes>
@@ -57,7 +59,7 @@ const Main: FC = () => {
 							<ErrorResult
 								status="404"
 								title="404"
-								subTitle="Sorry, the page you visited does not exist."
+								subTitle={t("error.notFound")}
 							/>
 						}
 					/>

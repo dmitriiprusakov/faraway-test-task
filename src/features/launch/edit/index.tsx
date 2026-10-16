@@ -1,3 +1,4 @@
+import { useTranslation, Translation } from "react-i18next";
 import { Button, Empty, Form, Input } from "antd";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { apiSlice, useGetLaunchQuery } from "api";
@@ -15,6 +16,7 @@ type FormValues = {
 }
 
 const LaunchEdit: FC = () => {
+	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 
 	const navigate = useNavigate();
@@ -51,16 +53,16 @@ const LaunchEdit: FC = () => {
 				autoComplete="off"
 			>
 				<Form.Item
-					label="Name"
+					label={t("launch.name")}
 					name="name"
-					rules={[{ required: true, message: "Please input name!" }]}
+					rules={[{ required: true, message: <Translation>{t => t("launch.nameRequired")}</Translation> }]}
 				>
 					<Input data-cy="edit-launch-name-input" />
 				</Form.Item>
 
 				<Form.Item >
 					<Button type="primary" htmlType="submit" data-cy="edit-launch-name-submit">
-						Submit
+						{t("common.submit")}
 					</Button>
 				</Form.Item>
 			</Form>

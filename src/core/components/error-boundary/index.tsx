@@ -1,3 +1,4 @@
+import { Translation } from "react-i18next";
 import type { ErrorInfo } from "react";
 import React from "react";
 
@@ -30,7 +31,7 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
 		if (this.state.errorInfo) {
 			return (
 				<div className={css.layout}>
-					<h3>Something went wrong.</h3>
+					<h3><Translation>{t => t("error.generic")}</Translation></h3>
 					<details>
 						{this.state.error && this.state.error.toString()}
 						<br />

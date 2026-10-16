@@ -88,6 +88,23 @@ Cypress tests use Launch Library-shaped fixtures to verify pagination, search,
 date ranges (including a missing bound), media mapping, local editing, statuses,
 missing fields, rate limits, and error handling without consuming the public quota.
 
+### Languages
+
+The header language selector switches between English and Russian using i18next
+and react-i18next. English is the default; the selected language is saved in
+`localStorage` under `faraway-language` and restored on reload and direct links.
+Unsupported saved values fall back to English. Switching still works if storage
+is unavailable, but the preference cannot then be saved.
+
+Translation resources live in `src/i18n/resources.ts`. TypeScript checks translation
+keys and requires matching keys in both languages. Ant Design and Day.js locales
+switch with the app, including pagination, calendars, and empty states. Dates stay
+in UTC, using `YYYY.MM.DD` in English and `DD.MM.YYYY` in Russian. Launch statuses
+are translated when rendered, so cached data updates immediately without another
+API request. The document language, browser title, form validation, and accessible
+labels also update. Names and descriptions supplied by Launch Library retain their
+original language; local edits are preserved when switching languages.
+
 ### Original implementation
 
 Hello!

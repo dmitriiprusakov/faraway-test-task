@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button, DatePicker, Drawer, Form, Input } from "antd";
 import type { FC } from "react";
 import { useMemo } from "react";
@@ -18,6 +19,7 @@ type FiltersFormValues = {
 }
 
 const Sidebar: FC = () => {
+	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 
 	const sidebarVisibility = useAppSelector(selectSidebarVisibility);
@@ -52,17 +54,17 @@ const Sidebar: FC = () => {
 
 	return (
 		<Drawer
-			title="Filters"
+			title={t("filters.title")}
 			onClose={handleClose}
 			open={sidebarVisibility}
 			rootClassName={css.drawerRoot}
 			extra={
 				<>
 					<Button className={css.button} onClick={handleClose}>
-						Cancel
+						{t("common.cancel")}
 					</Button>
 					<Button className={css.button} form="filters" type="primary" htmlType="submit">
-						Submit
+						{t("filters.submit")}
 					</Button>
 				</>
 			}
@@ -73,10 +75,10 @@ const Sidebar: FC = () => {
 				onFinish={handleFinish}
 				fields={fields}
 			>
-				<Form.Item label="Search" name="text">
+				<Form.Item label={t("filters.search")} name="text">
 					<Input data-cy="search-input" />
 				</Form.Item>
-				<Form.Item label="Date range" name="datesRange" data-cy="date-range-input">
+				<Form.Item label={t("filters.dateRange")} name="datesRange" data-cy="date-range-input">
 					<RangePicker allowEmpty={[true, true]} className={css.rangePicker} />
 				</Form.Item>
 				<Form.Item>
@@ -87,7 +89,7 @@ const Sidebar: FC = () => {
 						htmlType="submit"
 						data-cy="submit-filters-button"
 					>
-						Submit
+						{t("filters.submit")}
 					</Button>
 					<Button
 						className={css.button}
@@ -95,7 +97,7 @@ const Sidebar: FC = () => {
 						onClick={handleReset}
 						data-cy="reset-filters-button"
 					>
-						Reset
+						{t("common.reset")}
 					</Button>
 				</Form.Item>
 			</Form>
